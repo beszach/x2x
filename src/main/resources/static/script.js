@@ -15,7 +15,7 @@ function roleOfUser(roles) {
 
 const usersRows = (users) => {
     users.forEach(user => {
-        rezult += `<tr>
+        rezult += `<tr id="row${user.id}">
                             <td>${user.id}</td>
                             <td>${user.firstName}</td>
                             <td>${user.lastName}</td>
@@ -24,6 +24,7 @@ const usersRows = (users) => {
                             <td>${roleOfUser(user.roles)}</td>
                             <td class="text-center"><a class="btnEdit btn btn-primary">Edit</a><a class="btnDelete btn btn-danger">Delete</a></td>
                        </tr>
+                       
         `
     })
     tbody.innerHTML = rezult
@@ -94,7 +95,6 @@ on(document, 'click', '.btnEdit', async e => {
         // получаем значение для элемента
 
         var json = JSON.stringify(allRoles[i]);
-        delete json["id"];
         var value =  json;
         // создаем новый элемента
         var newOption = new Option(text, value);
@@ -147,6 +147,7 @@ const deleteRoles = document.getElementById('deleteRoles')
 
 on(document, 'click', '.btnDelete', e => {
     const fila = e.target.parentNode.parentNode
+
     idUser = fila.children[0].innerHTML
     const firstNameForm = fila.children[1].innerHTML
     const lastNameForm = fila.children[2].innerHTML
@@ -164,14 +165,14 @@ on(document, 'click', '.btnDelete', e => {
     modalDeleteBootstrap.show()
 })
 
-deleteUser.addEventListener('submit', (e) => {
-    e.preventDefault()
-    fetch(url + "/" + idUser, {
+deleteUser.addEventListener('click', async (e) =>  {
+   alert("here")
+    const fila = document.getElementById('row'+idUser)
+   alert('row'+idUser)
+    fila.parentElement.removeChild(fila)
+    await fetch(url + "/" + idUser, {
         method: 'DELETE'
     })
-        .then(response => response.json())
-        .then(response => location.reload())
-    modalDeleteBootstrap.hide()
 })
 
 const newUser = document.getElementById('newUser')

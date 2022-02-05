@@ -1,0 +1,2 @@
+insert into users(age, email, first_name, last_name, password) VALUES ('1', 'email1@mail.ru', '1', '1', '1');
+insert into users(age, email, first_name, last_name, password) VALUES ('2', 'email2@mail.ru', '2', '2', '2');
