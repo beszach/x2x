@@ -1,0 +1,28 @@
+{
+  "properties": [
+    {
+      "name": "hibernate.hbm2ddl.auto",
+      "type": "java.lang.String",
+      "description": "Description for hibernate.hbm2ddl.auto."
+    },
+    {
+      "name": "enable_lazy_load_no_trans",
+      "type": "java.lang.String",
+      "description": "Description for enable_lazy_load_no_trans."
+    },
+    {
+      "name": "enable_lazy_load_no_trans",
+      "type": "java.lang.String",
+      "description": "Description for enable_lazy_load_no_trans."
+    },
+    {
+      "name": "spring.jpa.enable_lazy_load_no_trans",
+      "type": "java.lang.String",
+      "description": "Description for spring.jpa.enable_lazy_load_no_trans."
+    },
+    {
+      "name": "spring.jpa.enable_lazy_load_no_trans",
+      "type": "java.lang.String",
+      "description": "Description for spring.jpa.enable_lazy_load_no_trans."
+    }
+  ] }

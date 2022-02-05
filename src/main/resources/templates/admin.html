@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- CSS -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+    <!-- Default theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+
+    <title>Admin panel</title>
+</head>
+<body>
+
+<!--email with roles: + роли пользователя и ссылка на logout-->
+<nav class="navbar navbar-dark bg-dark text-white">
+    <!--    Контейнер для 100%-ной ширины-->
+    <div class="container-fluid">
+        <span>
+<!--            подтягивает из формы аутентификации username (у меня это email), необходимо прописать в pom
+файле зависимость <artifactId>thymeleaf-extras-springsecurity5</artifactId>-->
+            <span sec:authentication="name"></span>
+            <span th:text="'with roles: '"></span>
+        </span>
+        <!--        расположение в конце контейнера-->
+        <ul class="navbar-nav justify-content-end">
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!--Контейнер (container-fluid - на всю ширину) - вся панель из 12 колонок, разбиваем её на col-md-2 + col-md-10-->
+<div class="container-fluid">
+    <div class="row">
+        <!--Левая часть админ-панели из 2 колонок строки на всю ширину-->
+                <div class="col-lg-2 px-0">
+                    <!--            nav-pills - подушка для подсвечивания-->
+                    <ul class="nav nav-pills flex-column">
+                        <li class="nav-item">
+                            <!--                    nav-link active подсвечивает указанную ссылку-->
+                            <a class="nav-link active" aria-current="page">Admin</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link">User</a>
+                        </li>
+                    </ul>
+                </div>
+        <!--Правая часть админ-панели из 10 колонок строки на всю ширину-->
+        <div class="col-lg-10 bg-light vh-100 px-3">
+            <h1>Admin panel</h1>
+
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" aria-current="page" href="#allUser">User table</a>
+                </li>
+                <li class="nav-item">
+                    <a id="linkNewUser" class="nav-link" data-toggle="tab" aria-controls="page" href="#newUser">New user</a>
+                </li>
+            </ul>
+
+            <!--Блок с контентом>-->
+            <!--id контента должен соответствовать href вкладки-->
+            <div class="tab-content border bg-white">
+                <!--Первый блок - отображение всех пользователей>-->
+                <div id="allUser" class="tab-pane fade show active">
+                    <h5 class="card-header">All users</h5>
+                    <br>
+                    <div class="px-3 pb-5">
+                        <h5>All users</h5>
+                        <table id="tableOfUsers" class="table table-borderless table-striped border-top">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Age</th>
+                                <th>Email</th>
+<!--                                <th>Password</th>-->
+                                <th>Role</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--------------------------Модальный элемент с id=”editUser”--------------------------------->
+                    <div id="editUser" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Edit user</h5>
+                                    <button type="button" class="btn-close" data-dismiss="modal"
+                                            aria-label="Close">
+                                    </button>
+                                </div>
+                                <div class="modal-body col-md text-center">
+                                    <form>
+                                        <label for="editId"><b>Id</b></label>
+                                        <input id="editId" type="number" class="form-control" readonly>
+                                        <br>
+                                        <label for="editFirstName"><b>First name</b></label>
+                                        <input id="editFirstName" type="text" class="form-control" required>
+                                        <br>
+                                        <label for="editLastName"><b>Last name</b></label>
+                                        <input id="editLastName" type="text" class="form-control" required>
+                                        <br>
+                                        <label for="editAge"><b>Age</b></label>
+                                        <input id="editAge" type="number" class="form-control" required>
+                                        <br>
+                                        <label for="editEmail"><b>Email</b></label>
+                                        <input id="editEmail" type="email" class="form-control" required>
+                                        <br>
+                                        <label for="editPassword"><b>Password</b></label>
+                                        <input id="editPassword" type="password" class="form-control" required>
+                                        <br>
+                                        <div class="userRolelist">
+                                        <label for="editRoles"><b>Roles</b></label>
+                                            <select id="editRoles" class="form-control" multiple size="2" name="roles" required>
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                            </button>
+                                            <button type="submit" class="btn btn-primary">Edit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!---------------------Конец модального окна editUser и deleteUser----------------------------------------------------------------->
+
+                    <!--Модальный элемент с id=”deleteUser”-->
+                    <div id="deleteUser" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Delete user</h5>
+                                    <button type="button" class="btn-close" data-dismiss="modal"
+                                            aria-label="Close">
+                                    </button>
+                                </div>
+                                <div class="modal-body col-md text-center">
+                                    <form>
+                                        <label for="deleteId"><b>Id</b></label>
+                                        <input id="deleteId" type="number" class="form-control" readonly>
+                                        <br>
+                                        <label for="deleteFirstName"><b>First name</b></label>
+                                        <input id="deleteFirstName" type="text" class="form-control" readonly>
+                                        <br>
+                                        <label for="deleteLastName"><b>Last name</b></label>
+                                        <input id="deleteLastName" type="text" class="form-control" readonly>
+                                        <br>
+                                        <label for="deleteAge"><b>Age</b></label>
+                                        <input id="deleteAge" type="number" class="form-control" readonly>
+                                        <br>
+                                        <label for="deleteEmail"><b>Email</b></label>
+                                        <input id="deleteEmail" type="email" class="form-control" readonly>
+                                        <br>
+                                        <label for="deletePassword"><b>Password</b></label>
+                                        <input id="deletePassword" type="password" class="form-control" readonly>
+                                        <br>
+                                        <label for="deleteRoles"><b>Roles</b></label>
+                                        <select id="deleteRoles" class="form-control" multiple size="2" name="roles" readonly>
+                                            <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                                            <option value="ROLE_USER">ROLE_USER</option>
+                                        </select>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                            </button>
+                                            <button type="submit" class="btn btn-primary">Delete</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+<!-------------------------------КОНЕЦ модального элемента с id=”deleteUser”------------------------------------>
+                </div>
+
+                <div id="newUser" class="tab-pane fade">
+                    <h5 class="card-header">New user</h5>
+                    <br>
+                    <div class="row justify-content-center">
+                        <div class="text-center pb-5 col-3">
+                            <form>
+                                <label for="newFirstName"><b>First name</b></label>
+                                <input id="newFirstName" class="form-control" placeholder="First name" required>
+                                <br>
+                                <label for="newLastName"><b>Last name</b></label>
+                                <input id="newLastName" class="form-control" placeholder="Last name" required>
+                                <br>
+                                <label for="newAge"><b>Age</b></label>
+                                <input id="newAge" class="form-control" placeholder="Age" required>
+                                <br>
+                                <label for="newEmail"><b>Email</b></label>
+                                <input id="newEmail" class="form-control weigth-50" placeholder="Email" required>
+                                <br>
+                                <label for="newPassword"><b>Password</b></label>
+                                <input id="newPassword" class="form-control" placeholder="Password" required>
+                                <br>
+                                <label for="newRoles"><b>Roles</b></label>
+                                <select id="newRoles" class="form-control" multiple size="2" name="roles" required>
+                                    <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                                    <option value="ROLE_USER">ROLE_USER</option>
+                                </select>
+                            <br>
+                            <button type="submit" class="btnNew btn btn-success">Add new user</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!---------------------------------------------------------------------------------------------------->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<!-- Option 1: Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"
+        integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2"
+        crossorigin="anonymous"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
